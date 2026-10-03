@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ARIA">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="styles.css">
+<title>ARIA</title>
+</head>
+<body>
+<div class="app">
+<header class="top"><div><small>PERSONAL INTELLIGENCE</small><h1>ARIA</h1></div><div id="ariaStatus" class="online"><i></i> ONLINE</div></header>
+
+<section id="home" class="view active">
+  <div class="hero glass">
+    <div class="core" onclick="go('chat')" role="button" aria-label="Apri chat"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><div class="a"></div><div class="node n1"></div><div class="node n2"></div><div class="node n3"></div><div class="node n4"></div><div class="node n5"></div></div>
+    <h2 id="hello">Ciao.</h2>
+    <p id="contextLine">La tua intelligenza personale per idee, progetti e decisioni.</p><div class="home-meta"><span id="projectCount">2 progetti attivi</span><span>•</span><span>Memoria locale</span></div>
+    <button class="primary" onclick="go('chat')">Parla con ARIA</button>
+  </div>
+  <div class="grid">
+    <button class="tile glass" onclick="go('chat')"><b><i class="uiicon chatIcon"></i> Chat</b><span>Conversazione</span></button>
+    <button class="tile glass" onclick="go('reality')"><b><i class="uiicon realityIcon"></i> Reality Check</b><span>Analisi concreta</span></button>
+    <button class="tile glass" onclick="go('projects')"><b><i class="uiicon projectIcon"></i> Progetti</b><span>Continua i tuoi lavori</span></button>
+    <button class="tile glass" onclick="go('memory')"><b><i class="uiicon memoryIcon"></i> Memoria</b><span>Contesto personale</span></button>
+  </div>
+  <div class="suggestions">
+    <button onclick="quickAsk('Continuiamo uno dei miei progetti')">Continua un progetto</button>
+    <button onclick="go('reality')">Nuovo Reality Check</button>
+    <button onclick="quickAsk('Aiutami a sviluppare una nuova idea')">Nuova idea</button>
+  </div>
+</section>
+
+<section id="chat" class="view">
+  <div class="head"><h2>Chat</h2><span>ARIA CORE</span></div>
+  <div id="chatlog" class="chatlog glass"></div>
+  <div class="composer glass">
+    <textarea id="chatInput" placeholder="Scrivi ad ARIA..."></textarea>
+    <div class="row"><button class="ghost" onclick="startVoice()">🎙 Voce</button><button class="primary" onclick="sendChat()">Invia</button></div>
+  </div>
+</section>
+
+<section id="reality" class="view">
+  <div class="head"><h2>Reality Check</h2><span>ANALISI</span></div>
+  <div class="glass panel">
+    <label>Descrivi l'idea</label>
+    <textarea id="ideaInput" rows="8" placeholder="Es. Voglio progettare..."></textarea>
+    <button class="primary wide" onclick="runReality()">Analizza</button>
+  </div>
+  <div id="realityResult" class="glass panel hidden"></div>
+</section>
+
+<section id="projects" class="view">
+  <div class="head"><h2>Progetti</h2><button class="ghost" onclick="addProject()">+ Nuovo</button></div>
+  <div id="projectsList"></div>
+</section>
+
+<section id="memory" class="view">
+  <div class="head"><h2>Memoria</h2><span>LOCALE</span></div>
+  <div class="glass panel">
+    <label>Nome</label><input id="memName">
+    <label>Interessi</label><textarea id="memInterests" rows="5"></textarea>
+    <label>Stile di ARIA</label><textarea id="memStyle" rows="5"></textarea>
+    <button class="primary wide" onclick="saveMemory()">Salva memoria</button>
+  </div>
+</section>
+
+<section id="settings" class="view">
+  <div class="head"><h2>Setup</h2><span>AI CORE</span></div>
+  <div class="glass panel">
+    <div id="aiStateCard" class="ai-state">
+      <strong id="aiStateTitle">AI non collegata</strong>
+      <span id="aiStateText">Collega Gemini una sola volta.</span>
+    </div>
+    <label>Gemini API key</label>
+    <input id="geminiKey" type="password" autocomplete="off" placeholder="Incolla qui la chiave gratuita">
+    <div class="setup-actions">
+      <button class="primary wide" onclick="saveGeminiKey()">Collega ARIA</button>
+      <button class="ghost wide" onclick="testGemini()">Test collegamento</button>
+    </div>
+    <p class="muted tiny">La chiave viene salvata solo nel browser di questo dispositivo e non viene scritta nei file dell'app.</p>
+  </div>
+</section>
+
+<nav class="nav">
+<button data-nav="home" onclick="go('home')"><i class="navicon homeIcon"></i><span>Home</span></button>
+<button data-nav="chat" onclick="go('chat')"><i class="navicon chatIcon"></i><span>Chat</span></button>
+<button data-nav="projects" onclick="go('projects')"><i class="navicon projectIcon"></i><span>Progetti</span></button>
+<button data-nav="memory" onclick="go('memory')"><i class="navicon memoryIcon"></i><span>Memoria</span></button>
+<button data-nav="settings" onclick="go('settings')"><i class="navicon setupIcon"></i><span>Setup</span></button>
+</nav>
+</div>
+
+<div id="onboarding" class="onboarding hidden">
+  <div class="onboarding-card glass">
+    <div class="mini-core"><span></span><span></span><span></span><i></i></div>
+    <div class="eyebrow2">ARIA AI CORE</div>
+    <h2>Collega il cervello</h2>
+    <p>Serve una chiave Gemini gratuita. È l'unica configurazione tecnica da fare.</p>
+    <a class="primary linkbtn" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">1. Crea chiave gratuita</a>
+    <input id="onboardingKey" type="password" placeholder="2. Incolla qui la chiave">
+    <button class="primary wide" onclick="finishOnboarding()">3. Attiva ARIA</button>
+    <button class="ghost wide" onclick="skipOnboarding()">Lo faccio dopo</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
